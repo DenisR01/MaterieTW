@@ -1,0 +1,64 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A simple app</title>
+    <script>
+        window.onload = async () => {
+            let inputValue = '';
+
+            const input = document.getElementById('filter');
+            const reload = document.getElementById('reload');
+            const table = document.getElementById('main');
+
+            const createTableRow = (name, color) => {
+                const tr = document.createElement('tr');
+
+                const tdName = document.createElement('td');
+                tdName.innerText = name;
+
+                const tdColor = document.createElement('td');
+                tdColor.innerText = color;
+
+                tr.append(tdName);
+                tr.append(tdColor);
+
+                table.append(tr);
+
+            }
+
+            input.onchange = (e) => {
+                inputValue = e.target.value;
+            }
+
+            reload.onclick = () => {
+
+                table.innerHTML = "";
+
+
+                fetch(`http://localhost:8080/cars?filter=${inputValue}`).then(response => response.json()).then(cars => {
+
+                    cars.map(car => createTableRow(car.name, car.color));
+
+                });
+
+            }
+
+
+
+
+        }
+    </script>
+</head>
+
+<body>
+    A simple app
+    <input type="text" placeholder="filter" id="filter" />
+    <button id="reload">reload</button>
+    <table id=main>
+
+    </table>
+</body>
+
+</html>
