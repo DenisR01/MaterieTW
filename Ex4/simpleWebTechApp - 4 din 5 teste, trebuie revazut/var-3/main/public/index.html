@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Webtech</title>
+</head>
+
+<body>
+    <p>Webtech app</p>
+    <table id="table"></table>
+    <button id="load">load</button>
+    <button id="delete">delete</button>
+    <input type="text" id="name" />
+
+    <script>
+
+
+        window.onload = () => {
+
+            const table = document.getElementById('table');
+            const loadBtn = document.getElementById('load');
+            const deleteBtn = document.getElementById('delete');
+            const inputName = document.getElementById('name');
+
+            let filter = '';
+
+            inputName.onchange = (e) => {
+                filter = e.target.value;
+            }
+
+
+            const createTableRow = (name, surname, age) => {
+                const tr = document.createElement('tr');
+
+                const tdName = document.createElement('td');
+                tdName.innerText = name;
+
+                const tdSurname = document.createElement('td');
+                tdSurname.innerText = surname;
+
+                const tdAge = document.createElement('td');
+                tdAge.innerText = age;
+
+                tr.append(tdName);
+                tr.append(tdSurname);
+                tr.append(tdAge);
+
+                table.append(tr);
+            }
+
+
+            const deleteRows = (containingNameString) => {
+
+                const tableRows = document.getElementsByTagName('tr');
+
+                for (let i = 0; i < tableRows.length; i++) {
+                    if (tableRows[i].childNodes[0].innerText.includes(containingNameString) || tableRows[i].childNodes[1].innerText.includes(containingNameString))
+                        tableRows[i].remove();
+                }
+
+            }
+
+
+            loadBtn.onclick = () => {
+                fetch('http://localhost:8080/data').then(response => response.json()).then(data => {
+                    data.map(element => createTableRow(element.name, element.surname, element.age));
+                });
+            }
+
+            deleteBtn.onclick = () => {
+                deleteRows(filter);
+            }
+
+
+
+        }
+    </script>
+</body>
+
+</html>
