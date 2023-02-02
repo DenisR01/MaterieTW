@@ -1,0 +1,53 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A simple app</title>
+    <script>
+
+        window.onload = async () => {
+
+            const table = document.getElementById('main');
+            const button = document.getElementById('load');
+
+            const createTableRow = (name, color) => {
+                const tr = document.createElement('tr');
+
+                const tdName = document.createElement('td');
+                tdName.innerText = name;
+
+                const tdColor = document.createElement('td');
+                tdColor.innerText = color;
+
+                tr.append(tdName);
+                tr.append(tdColor);
+
+                table.append(tr);
+            }
+
+            button.onclick = () => {
+
+                table.innerHTML = '';
+
+                fetch('http://localhost:8080/cars').then(response => response.json()).then(cars => {
+
+                    cars.filter(car => car.color === 'red').map(car => createTableRow(car.name, car.color));
+
+                })
+            }
+
+
+
+        }
+
+    </script>
+</head>
+
+<body>
+    A simple app
+    <table id=main></table>
+    <input type="button" id="load" value="Load">
+</body>
+
+</html>
